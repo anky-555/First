@@ -37,5 +37,5 @@ steps:
     displayName: Terraform Apply
     inputs:
       provider: 'azurerm'
-      command: 'destroy'
+      command: 'apply'
       environmentServiceNameAzureRM: 'rsikaconnection'
