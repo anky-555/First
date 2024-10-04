@@ -1,0 +1,36 @@
+name: TerrafromPipeline
+pool: Default
+trigger:
+  - main
+
+steps:
+
+  - task: TerraformInstaller@1
+    inputs:
+      terraformVersion: 'latest'
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      backendServiceArm: 'rsikaconnection'
+      backendAzureRmResourceGroupName: 'RSI_RG_PO'
+      backendAzureRmStorageAccountName: 'rsisapo'
+      backendAzureRmContainerName: 'rsiscpo'
+      backendAzureRmKey: 'test.terraform.tfstate'
+      
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'validate'
+    
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'plan'
+      environmentServiceNameAzureRM: 'rsikaconnection'
+    
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      environmentServiceNameAzureRM: 'rsikaconnection'
